@@ -301,7 +301,7 @@ st.markdown("""
     
     /* Selector */
     .selector-box {
-        background: #fff;
+        background: #e0e0e0;
         border-radius: 16px;
         padding: 15px 20px;
         margin-bottom: 15px;
