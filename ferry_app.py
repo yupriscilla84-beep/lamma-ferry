@@ -223,7 +223,7 @@ st.markdown("""
     
     .status-panel.missed {
         border: 3px solid #e74c3c;
-        background: #fff5f5;
+        background: #d2fcd2;
     }
     
     .status-panel.hurry {
@@ -332,7 +332,7 @@ st.markdown("""
     
     /* Radio buttons */
     .stRadio > div { gap: 5px; }
-    .stRadio label { color: #555; font-weight: 600; }
+    .stRadio label { color: #d2fcd2; font-weight: 600; }
     
 </style>
 """, unsafe_allow_html=True)
