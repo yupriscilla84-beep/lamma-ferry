@@ -182,7 +182,7 @@ st.markdown("""
     
     /* Status Panel - THE QUICK GLANCE */
     .status-panel {
-        background: #fff;
+        background: #969090;
         border-radius: 20px;
         padding: 20px 25px;
         margin-bottom: 15px;
@@ -301,7 +301,7 @@ st.markdown("""
     
     /* Selector */
     .selector-box {
-        background: #e0e0e0;
+        background: #969090;
         border-radius: 16px;
         padding: 15px 20px;
         margin-bottom: 15px;
@@ -327,12 +327,12 @@ st.markdown("""
         font-weight: 600;
         font-size: 0.9rem;
     }
-    .stButton > button[kind="primary"] { background: #0e6655; }
+    .stButton > button[kind="primary"] { background: #e0e0e0; }
     .stButton > button[kind="secondary"] { background: #e8e8e8; color: #333; }
     
     /* Radio buttons */
     .stRadio > div { gap: 5px; }
-    .stRadio label { color: #0a0a0a; font-weight: 600; }
+    .stRadio label { color: #969090; font-weight: 600; }
     
 </style>
 """, unsafe_allow_html=True)
@@ -537,6 +537,6 @@ if past_ferries:
 st.markdown("---")
 st.markdown("""
 <div style="text-align:center;color:#bbb;font-size:0.75rem;padding:10px;">
-    🚢 Schedule from HKKF • Made for Lamma Islanders
+    🚢 Schedule from HKKF • Made for Lamma YSW Islanders
 </div>
 """, unsafe_allow_html=True)
