@@ -369,7 +369,8 @@ with col2:
         commute_options = {
             "🏢 Office (45 min)": 45,
             "🚇 MTR (35 min)": 35,
-            "🏠 Home (30 min)": 30,
+            "🚗 Taxi from office (20 min)": 20,
+            "🏋️ Gym (15 min)": 15,
             "📍 At pier (0 min)": 0,
         }
     else:
