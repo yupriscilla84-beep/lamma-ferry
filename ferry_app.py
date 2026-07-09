@@ -332,7 +332,7 @@ st.markdown("""
     
     /* Radio buttons */
     .stRadio > div { gap: 5px; }
-    .stRadio label { color: #d2fcd2; font-weight: 600; }
+    .stRadio label { color: #0a0a0a; font-weight: 600; }
     
 </style>
 """, unsafe_allow_html=True)
