@@ -385,8 +385,9 @@ with col2:
     else:
         commute_options = {
             "🏠 Home (15 min)": 15,
-            "🏖️ Beach (25 min)": 25,
-            "🍽️ Restaurant (10 min)": 10,
+            "🏖️ Power Station Beach (25 min)": 25,
+            "🐕 Beira's speed (20mins)":20,
+            "🍽️ Vlad's speed (10 min)": 10,
             "📍 At pier (0 min)": 0,
         }
     
