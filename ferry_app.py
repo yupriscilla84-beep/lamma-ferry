@@ -95,20 +95,18 @@ def parse_time(time_str, dt):
     return ferry_dt
 
 def get_all_ferries(route, dt, commute_minutes):
-    """Get previous (missed) + upcoming ferries"""
     schedule = get_schedule(route, dt)
     tomorrow = dt + timedelta(days=1)
     tomorrow_schedule = get_schedule(route, tomorrow)
     
     all_ferries = []
     
-    # Today's ferries (both past and future)
     for time_str in schedule:
         ferry_time = parse_time(time_str, dt)
         leave_by = ferry_time - timedelta(minutes=commute_minutes)
         minutes_until = int((ferry_time - dt).total_seconds() / 60)
         
-        if minutes_until < -120:  # Skip ferries more than 2 hours ago
+        if minutes_until < -120:
             continue
             
         status = get_status(minutes_until, commute_minutes, leave_by, dt)
@@ -122,7 +120,6 @@ def get_all_ferries(route, dt, commute_minutes):
             'is_past': minutes_until < 0
         })
     
-    # Tomorrow's early ferries if needed
     if len([f for f in all_ferries if not f['is_past']]) < 5:
         for time_str in tomorrow_schedule[:3]:
             ferry_time = parse_time(time_str, tomorrow)
@@ -158,7 +155,7 @@ def get_status(minutes_until, commute_minutes, leave_by, dt):
         return "ok"
 
 # ═══════════════════════════════════════
-# CSS - Clean, Lamma beach vibe
+# CSS
 # ═══════════════════════════════════════
 st.markdown("""
 <style>
@@ -167,10 +164,9 @@ st.markdown("""
     * { font-family: 'Nunito', sans-serif; }
     
     .stApp { 
-        background: #f5f7f5; 
+        background: #dce8e0; 
     }
     
-    /* Header */
     .app-header {
         background: linear-gradient(135deg, #0e6655, #148f77);
         padding: 20px 25px;
@@ -180,9 +176,8 @@ st.markdown("""
     .app-title { font-size: 2rem; font-weight: 900; color: #fff; margin: 0; }
     .app-subtitle { font-size: 0.9rem; color: #a3e4d7; margin: 2px 0 0 0; }
     
-    /* Status Panel - THE QUICK GLANCE */
     .status-panel {
-        background: #969090;
+        background: #fff;
         border-radius: 20px;
         padding: 20px 25px;
         margin-bottom: 15px;
@@ -199,7 +194,7 @@ st.markdown("""
     
     .status-panel .leave-label {
         font-size: 0.85rem;
-        color: #d2fcd2;
+        color: #999;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 5px;
@@ -223,7 +218,7 @@ st.markdown("""
     
     .status-panel.missed {
         border: 3px solid #e74c3c;
-        background: #d2fcd2;
+        background: #fff5f5;
     }
     
     .status-panel.hurry {
@@ -244,7 +239,6 @@ st.markdown("""
         50% { border-color: #ff9999; }
     }
     
-    /* Current time */
     .time-badge {
         background: #fff;
         border-radius: 12px;
@@ -256,7 +250,6 @@ st.markdown("""
     .time-badge .now { font-size: 1.3rem; font-weight: 800; color: #0e6655; }
     .time-badge .day { font-size: 0.8rem; color: #999; }
     
-    /* Ferry list */
     .ferry-row {
         display: flex;
         align-items: center;
@@ -299,40 +292,37 @@ st.markdown("""
     .badge.soon { background: #f39c12; color: #fff; }
     .badge.ok { background: #e8e8e8; color: #888; }
     
-    /* Selector */
     .selector-box {
-        background: #969090;
+        background: #c8d8cc;
         border-radius: 16px;
         padding: 15px 20px;
         margin-bottom: 15px;
         box-shadow: 0 1px 6px rgba(0,0,0,0.04);
     }
     
-    /* Divider */
     .section-label {
         font-size: 0.8rem;
-        color: #aaa;
+        color: #888;
         text-transform: uppercase;
         letter-spacing: 1px;
         padding: 10px 15px 5px 15px;
     }
     
-    /* Override Streamlit */
     header { visibility: hidden; }
     footer { visibility: hidden; }
     
-    /* Buttons */
     .stButton > button {
         border-radius: 10px;
         font-weight: 600;
         font-size: 0.9rem;
     }
-    .stButton > button[kind="primary"] { background: #e0e0e0; }
+    .stButton > button[kind="primary"] { background: #0e6655; }
     .stButton > button[kind="secondary"] { background: #e8e8e8; color: #333; }
     
-    /* Radio buttons */
     .stRadio > div { gap: 5px; }
-    .stRadio label { color: #969090; font-weight: 600; }
+    .stRadio label { color: #1a1a1a; font-weight: 600; }
+    
+    .stSelectbox label { color: #1a1a1a; font-weight: 600; }
     
 </style>
 """, unsafe_allow_html=True)
@@ -386,7 +376,7 @@ with col2:
         commute_options = {
             "🏠 Home (15 min)": 15,
             "🏖️ Power Station Beach (25 min)": 25,
-            "🐕 Beira's speed (20mins)":20,
+            "🐕 Beira's speed (20mins)": 20,
             "🍽️ Vlad's speed (10 min)": 10,
             "📍 At pier (0 min)": 0,
         }
@@ -409,23 +399,20 @@ st.markdown(f"""
 # ═══════════════════════════════════════
 all_ferries = get_all_ferries(route, hk_time, commute_minutes)
 
-# Separate past and future
 past_ferries = [f for f in all_ferries if f['is_past']]
 future_ferries = [f for f in all_ferries if not f['is_past']]
 
-# Find next catchable ferry
 next_ferry = None
 for f in future_ferries:
     if f['status'] in ['ok', 'soon', 'leave_now']:
         next_ferry = f
         break
 
-# If all remaining are late/hurry, pick the first future one
 if not next_ferry and future_ferries:
     next_ferry = future_ferries[0]
 
 # ═══════════════════════════════════════
-# STATUS PANEL - Quick Glance
+# STATUS PANEL
 # ═══════════════════════════════════════
 if next_ferry:
     panel_status = next_ferry['status']
@@ -489,7 +476,6 @@ for ferry in future_ferries[:8]:
         leave_text = ferry['leave_by'].strftime('%I:%M %p')
         leave_ok = "ok" if ferry['status'] == 'ok' else ""
     
-    # Badge
     if is_next:
         badge_class = "next"
         badge_text = "NEXT"
@@ -520,7 +506,7 @@ for ferry in future_ferries[:8]:
 # ═══════════════════════════════════════
 if past_ferries:
     with st.expander(f"📭 Missed Ferries ({len(past_ferries)})", expanded=False):
-        for ferry in past_ferries[-4:]:  # Show last 4 missed
+        for ferry in past_ferries[-4:]:
             st.markdown(f"""
             <div class="ferry-row missed">
                 <span class="ferry-icon">🚢</span>
@@ -536,7 +522,7 @@ if past_ferries:
 # ═══════════════════════════════════════
 st.markdown("---")
 st.markdown("""
-<div style="text-align:center;color:#bbb;font-size:0.75rem;padding:10px;">
-    🚢 Schedule from HKKF • Made for Lamma YSW Islanders
+<div style="text-align:center;color:#888;font-size:0.75rem;padding:10px;">
+    🚢 Schedule from HKKF • Made for Lamma Islanders
 </div>
 """, unsafe_allow_html=True)
