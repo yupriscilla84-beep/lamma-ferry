@@ -199,7 +199,7 @@ st.markdown("""
     
     .status-panel .leave-label {
         font-size: 0.85rem;
-        color: #999;
+        color: #d2fcd2;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 5px;
